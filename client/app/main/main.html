@@ -1,3 +1,4 @@
+<h2>Save Elephants</h2>
 <script>
     /*
     written by dstarr 
@@ -22,7 +23,7 @@
         //scene.add( ambient );
 
         renderer = new THREE.WebGLRenderer( { antialias: true } );
-        renderer.setSize( window.innerWidth, window.innerHeight);
+        renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
         document.body.appendChild( renderer.domElement );
         //container.appendChild( renderer.domElement );
         //stats code, like new Stats();
@@ -55,7 +56,11 @@
     }
 
     function render() {
-        var delta = 0.75 * clock.getDelta();
+        var delta = 70 * clock.getDelta();
+        //var delta = 0.75 * clock.getDelta();
+        console.log(clock.getDelta());
+        console.log('wooooooow');
+        console.log(delta);
 
 
         if (animmesh) {
