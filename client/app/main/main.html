@@ -11,6 +11,9 @@
         // field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
         camera.position.x = -900;
+        camera.up.set( 0,-1 ,0);
+        console.log('whoooa camera');
+        console.log(camera);
         scene = new THREE.Scene();
         //scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
         scene.add(camera);
@@ -22,7 +25,7 @@
         //var ambient = new THREE.AmbientLight( 0x222222 );
         //scene.add( ambient );
 
-        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
         document.body.appendChild( renderer.domElement );
         //container.appendChild( renderer.domElement );
@@ -42,9 +45,11 @@
 
     function createScene(model, material) {
         //skinning = true for every material;
-        //material[0].skinning = true;
+        material[0].skinning = true;
         //animmesh = new THREE.SkinnedMesh(model, material[0]);
         animmesh = new THREE.Mesh(model, new THREE.MeshNormalMaterial());
+        console.log('heeeey');
+        console.log(animmesh);
         scene.add(animmesh);
         var animation = new THREE.Animation(animmesh, model.animation);
         animation.play();
@@ -58,9 +63,8 @@
     function render() {
         var delta = 70 * clock.getDelta();
         //var delta = 0.75 * clock.getDelta();
-        console.log(clock.getDelta());
-        console.log('wooooooow');
-        console.log(delta);
+        //console.log(clock.getDelta());
+        //console.log(delta);
 
 
         if (animmesh) {
