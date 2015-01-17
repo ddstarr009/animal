@@ -10,7 +10,7 @@
     function init() { 
         // field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.x = -700;
+        camera.position.x = -500;
         camera.up.set( -1,0 ,1);
         console.log('whoooa camera');
         console.log(camera);
@@ -47,13 +47,19 @@
         //skinning = true for every material;
         material[0].skinning = true;
 
-        animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: 0xaaaa00, skinning: true}));
-        //animmesh = new THREE.Mesh(model, new THREE.MeshNormalMaterial());
-        console.log('heeeey');
-        console.log(animmesh);
-        scene.add(animmesh);
-        var animation = new THREE.Animation(animmesh, model.animation);
-        animation.play();
+        var tgaLoader = new THREE.TGALoader();
+        console.log('hii tgaLoader' + tgaLoader);
+
+        tgaLoader.load("../../assets/ELEPHANT_DIFF_SPEC.tga", function(texture) {
+            var hexColor = "#848081";
+            animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
+            //animmesh = new THREE.Mesh(model, new THREE.MeshNormalMaterial());
+            console.log('heeeey');
+            console.log(animmesh);
+            scene.add(animmesh);
+            var animation = new THREE.Animation(animmesh, model.animation);
+            animation.play();
+        });
     }
 
     function animate() {
