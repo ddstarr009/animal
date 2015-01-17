@@ -4,14 +4,15 @@
     written by dstarr 
     */
 
-    var camera, scene, renderer, animmesh;
+    var controls, camera, scene, renderer, animmesh;
     var clock = new THREE.Clock();
 
     function init() { 
         // field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.x = -300;
+        camera.position.x = -900;
         camera.up.set( -1,0 ,1);
+        controls = new THREE.OrbitControls( camera );
         console.log('whoooa camera');
         console.log(camera);
         scene = new THREE.Scene();
