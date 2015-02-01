@@ -4,7 +4,7 @@
     written by dstarr 
     */
 
-    var controls, camera, scene, renderer, animmesh, cubeCamera;
+    var controls, camera, scene, renderer, animmesh, mirrorCube, mirrorCubeCamera;
     var clock = new THREE.Clock();
 
     function init() { 
@@ -20,14 +20,19 @@
         //scene.fog = new THREE.Fog(white, .1, 10000 );
 
 
-        var cubeGeom = new THREE.CubeGeometry(100, 100, 10, 1, 1, 1);
-        var meshMaterial = new THREE.MeshPhongMaterial({ color   : 'gold' });
-        cubeCamera  = new THREEx.CubeCamera(stupidMesh);
-        meshMaterial.envMap = cubeCamera.textureCube;
-        var stupidMesh = new THREE.Mesh(cubeGeom, meshMaterial);
-        scene.add(stupidMesh);
+        // mirror code
+        var cubeGeom = new THREE.CubeGeometry(1000, 1000, 100, 1, 1, 1);
+        mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 512);
+        mirrorCubeCamera.position.x = -900;
+        scene.add(mirrorCubeCamera);
+        var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+        mirrorCube = new THREE.Mesh(cubeGeom, mirrorCubeMaterial);
+        mirrorCube.position.set(-75,50,0);
+        mirrorCubeCamera.position = mirrorCube.position;
+        scene.add(mirrorCube);
+
+
         scene.add(camera);
-        scene.add(cubeCamera.object3d);
         //var ground = new THREE.Mesh( geometry, material );
         //ground.position.set( 0, FLOOR, 0 );
         //ground.rotation.x = -Math.PI/2;
@@ -79,6 +84,13 @@
     }
 
     function render() {
+        
+        // move the CubeCamera to the position of the object that has a reflective surface, "take a picture" in each direction
+        // and apply it to the surface. Need to hide surface before and after so that it does not  "get in the way" of the camera
+        mirrorCube.visible = false;
+        mirrorCubeCamera.updateCubeMap(renderer, scene);
+        mirrorCube.visible = true;
+
         var delta = 10 * clock.getDelta();
         //console.log(clock.getDelta());
         //console.log(delta);
@@ -89,8 +101,6 @@
         }
 
         renderer.render(scene, camera);
-
-        cubeCamera.update(renderer, scene)
 
         camera.lookAt(new THREE.Vector3(0,-80,100));
     }
