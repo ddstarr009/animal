@@ -4,7 +4,7 @@
     written by dstarr 
     */
 
-    var controls, camera, scene, renderer, animmesh;
+    var controls, camera, scene, renderer, animmesh, cubeCamera;
     var clock = new THREE.Clock();
 
     function init() { 
@@ -16,8 +16,18 @@
         console.log('whoooa camera');
         console.log(camera);
         scene = new THREE.Scene();
-        //scene.fog = new THREE.Fog( 0xffffff, 2000, 10000 );
+        //var white = "#ffffff";
+        //scene.fog = new THREE.Fog(white, .1, 10000 );
+
+
+        var cubeGeom = new THREE.CubeGeometry(100, 100, 10, 1, 1, 1);
+        var meshMaterial = new THREE.MeshPhongMaterial({ color   : 'gold' });
+        cubeCamera  = new THREEx.CubeCamera(stupidMesh);
+        meshMaterial.envMap = cubeCamera.textureCube;
+        var stupidMesh = new THREE.Mesh(cubeGeom, meshMaterial);
+        scene.add(stupidMesh);
         scene.add(camera);
+        scene.add(cubeCamera.object3d);
         //var ground = new THREE.Mesh( geometry, material );
         //ground.position.set( 0, FLOOR, 0 );
         //ground.rotation.x = -Math.PI/2;
@@ -79,6 +89,9 @@
         }
 
         renderer.render(scene, camera);
+
+        cubeCamera.update(renderer, scene)
+
         camera.lookAt(new THREE.Vector3(0,-80,100));
     }
 
