@@ -10,7 +10,8 @@
     function init() { 
         // field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.x = -900;
+        //camera.position.x = -900;
+        camera.position.set(781, 374,242);
         camera.up.set( -1,0 ,1);
         controls = new THREE.OrbitControls( camera );
         console.log('whoooa camera');
@@ -19,15 +20,26 @@
         //var white = "#ffffff";
         //scene.fog = new THREE.Fog(white, .1, 10000 );
 
+        // FLOOR
+        var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/checkerboard.jpg' );
+        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+        floorTexture.repeat.set( 15, 15 );
+        var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side:THREE.BackSide } );
+        var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.position.z = 20; 
+        floor.rotation.x = Math.PI;
+        scene.add(floor);
+
 
         // mirror code
-        var cubeGeom = new THREE.CubeGeometry(1000, 1000, 100, 1, 1, 1);
+        var boxGeom = new THREE.BoxGeometry(150, 100, 500, 1, 1, 1);
         mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 512);
         mirrorCubeCamera.position.x = -900;
         scene.add(mirrorCubeCamera);
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
-        mirrorCube = new THREE.Mesh(cubeGeom, mirrorCubeMaterial);
-        mirrorCube.position.set(-75,50,0);
+        mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
+        mirrorCube.position.set(0,0,200);
         mirrorCubeCamera.position = mirrorCube.position;
         scene.add(mirrorCube);
 
@@ -69,6 +81,7 @@
         tgaLoader.load("../../assets/ELEPHANT_DIFF_SPEC.tga", function(texture) {
             var hexColor = "#848081";
             animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
+            animmesh.position.set(0,500,0);
             //animmesh = new THREE.Mesh(model, new THREE.MeshNormalMaterial());
             console.log('heeeey');
             console.log(animmesh);
