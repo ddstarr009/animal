@@ -1,4 +1,4 @@
-<h2>Save Elephants</h2>
+<!--<h2>Save Elephants</h2>-->
 <script>
     /*
     written by dstarr 
@@ -10,7 +10,7 @@
     function init() { 
         // args for constructor are field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.set(-568, 694,48);
+        camera.position.set(-72, 894,50);
         camera.up.set( -1,0 ,1);
         controls = new THREE.OrbitControls( camera );
         scene = new THREE.Scene();
@@ -28,20 +28,20 @@
         scene.add(floor);
 
         // mirror code
-        var boxGeom = new THREE.BoxGeometry(300, 10, 300, 1, 1, 1);
-        mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 500);
+        var boxGeom = new THREE.BoxGeometry(500, 10, 600, 1, 1, 1);
+        mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 1000);
         scene.add(mirrorCubeCamera);
 
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
-        mirrorCube.position.set(100,-450,200);
+        mirrorCube.position.set(100,-450,170);
         //mirrorCube.rotation.z = Math.PI / 2;
-        mirrorCubeCamera.position = (-200,500,-200);
+        mirrorCubeCamera.position = mirrorCube.position;
         scene.add(mirrorCube);
 
 
         renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth * .9, window.innerHeight * .9);
+        renderer.setSize( window.innerWidth, window.innerHeight);
         document.body.appendChild( renderer.domElement );
         //container.appendChild( renderer.domElement );
 
@@ -67,6 +67,7 @@
         tgaLoader.load("../../assets/ELEPHANT_DIFF_SPEC.tga", function(texture) {
             var hexColor = "#848081";
             animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
+            animmesh.scale.set(.3,.3,.3);
             animmesh.position.set(0,610,0);
             scene.add(animmesh);
             var animation = new THREE.Animation(animmesh, model.animation);
@@ -88,16 +89,17 @@
         mirrorCube.visible = true;
 
         var delta = 10 * clock.getDelta();
-        //console.log(clock.getDelta());
+        console.log(clock.getDelta());
         //console.log(delta);
         //console.log('camera.position');
         //console.log(camera.position);
-
-
        
         if (animmesh) {
             THREE.AnimationHandler.update(delta);
         }
+
+        var yPos = animmesh.position.y - (1000 * clock.getDelta());
+        animmesh.position.y = yPos;
 
         renderer.render(scene, camera);
 
