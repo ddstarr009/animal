@@ -4,20 +4,21 @@
     written by dstarr 
     */
 
-    var controls, camera, scene, renderer, animmesh, mirrorCube, mirrorCubeCamera;
+    var animation, controls, camera, scene, renderer, animmesh, mirrorCube, mirrorCubeCamera;
     var clock = new THREE.Clock();
 
     function init() { 
         // args for constructor are field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.set(-72, 894,50);
+        camera.position.set(-307, 842,47);
         camera.up.set( -1,0 ,1);
         controls = new THREE.OrbitControls( camera );
         scene = new THREE.Scene();
         scene.add(camera);
 
         // FLOOR
-        var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/checkerboard.jpg' );
+        //var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/checkerboard.jpg' );
+        var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/ice.jpg' );
         floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
         floorTexture.repeat.set(10, 10 );
         var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side:THREE.BackSide } );
@@ -34,7 +35,8 @@
 
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
-        mirrorCube.position.set(100,-450,170);
+        //mirrorCube.position.set(100,-450,170);
+        mirrorCube.position.set(0,-450,320);
         //mirrorCube.rotation.z = Math.PI / 2;
         mirrorCubeCamera.position = mirrorCube.position;
         scene.add(mirrorCube);
@@ -68,10 +70,13 @@
             var hexColor = "#848081";
             animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
             animmesh.scale.set(.3,.3,.3);
-            animmesh.position.set(0,610,0);
+            animmesh.position.set(0,610,20);
             scene.add(animmesh);
-            var animation = new THREE.Animation(animmesh, model.animation);
-            animation.play();
+            animation = new THREE.Animation(animmesh, model.animation);
+            console.log('hey there');
+            console.log(animation);
+            animation.play(130);
+            animate();
         });
     }
 
@@ -89,16 +94,16 @@
         mirrorCube.visible = true;
 
         var delta = 10 * clock.getDelta();
-        console.log(clock.getDelta());
         //console.log(delta);
         //console.log('camera.position');
         //console.log(camera.position);
+        //animation.getNextKeyWith("pos", animation.data.hierarchy, 
        
         if (animmesh) {
             THREE.AnimationHandler.update(delta);
         }
 
-        var yPos = animmesh.position.y - (1000 * clock.getDelta());
+        var yPos = animmesh.position.y - (2500 * clock.getDelta());
         animmesh.position.y = yPos;
 
         renderer.render(scene, camera);
@@ -107,6 +112,5 @@
     }
 
     init();
-    animate();
 
 </script>
