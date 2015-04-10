@@ -33,7 +33,7 @@
         mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 1000);
         scene.add(mirrorCubeCamera);
 
-        var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+        var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } ); // renderTarget is generated cube texture
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
         //mirrorCube.position.set(100,-450,170);
         mirrorCube.position.set(0,-450,320);
@@ -49,7 +49,8 @@
 
         var loader = new THREE.JSONLoader();
 
-        loader.load("../../assets/model-threejs.json", function (model, material) {
+        loader.load("../../assets/allElephantAnimations.json", function (model, material) {
+        //loader.load("../../assets/elephantWalking.json", function (model, material) {
             console.log('hiiii model: ');
             console.log(model);
             console.log('hiiii loaded material: ');
@@ -75,13 +76,14 @@
             animation = new THREE.Animation(animmesh, model.animation);
             console.log('hey there');
             console.log(animation);
-            animation.play(130);
+            animation.loop = false;
+            animation.play(21);
             animate();
         });
     }
 
     function animate() {
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animate); // tells browser to call animate callback before next repaint
         render();
     }
 
@@ -93,18 +95,27 @@
         mirrorCubeCamera.updateCubeMap(renderer, scene);
         mirrorCube.visible = true;
 
-        var delta = 10 * clock.getDelta();
+        var delta = 2 * clock.getDelta();
         //console.log(delta);
         //console.log('camera.position');
         //console.log(camera.position);
         //animation.getNextKeyWith("pos", animation.data.hierarchy, 
-       
-        if (animmesh) {
-            THREE.AnimationHandler.update(delta);
-        }
 
-        var yPos = animmesh.position.y - (2500 * clock.getDelta());
-        animmesh.position.y = yPos;
+        console.log("hiii time");
+        console.log(animation.currentTime);
+        if (animation.currentTime > 28.5) {
+            animation.stop();
+        }
+       
+        if (animation.isPlaying) {
+            if (animmesh) {
+                THREE.AnimationHandler.update(delta);
+            }
+
+            var yPos = animmesh.position.y - (1000 * clock.getDelta());
+
+            animmesh.position.y = yPos;
+        }
 
         renderer.render(scene, camera);
 
