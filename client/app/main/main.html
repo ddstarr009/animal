@@ -28,6 +28,26 @@
         floor.rotation.x = Math.PI; // 180 degrees
         scene.add(floor);
 
+
+        // SKYBOX
+        var materialArray = [];
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-xpos.png' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-xneg.png' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-ypos.png' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-yneg.png' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-zpos.png' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( '../../assets/dawnmountain-zneg.png' ) }));
+
+        for (var i = 0; i < 6; i++) {
+            materialArray[i].side = THREE.BackSide;
+        }
+
+        var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
+        var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
+        var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
+        scene.add( skybox );
+
+
         // mirror code
         var boxGeom = new THREE.BoxGeometry(500, 10, 600, 1, 1, 1);
         mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 1000);
@@ -35,7 +55,6 @@
 
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } ); // renderTarget is generated cube texture
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
-        //mirrorCube.position.set(100,-450,170);
         mirrorCube.position.set(0,-450,320);
         //mirrorCube.rotation.z = Math.PI / 2;
         mirrorCubeCamera.position = mirrorCube.position;
@@ -101,8 +120,6 @@
         //console.log(camera.position);
         //animation.getNextKeyWith("pos", animation.data.hierarchy, 
 
-        console.log("hiii time");
-        console.log(animation.currentTime);
         if (animation.currentTime > 28.5) {
             animation.stop();
         }
