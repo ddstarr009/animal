@@ -10,7 +10,7 @@
     function init() { 
         // args for constructor are field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
-        camera.position.set(-307, 842,47);
+        camera.position.set(-307, 842,-2300);
         camera.up.set( -1,0 ,1);
         controls = new THREE.OrbitControls( camera );
         scene = new THREE.Scene();
@@ -18,15 +18,15 @@
 
         // FLOOR
         //var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/checkerboard.jpg' );
-        var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/ice.jpg' );
-        floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-        floorTexture.repeat.set(10, 10 );
-        var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side:THREE.BackSide } );
-        var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-        var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.position.z = 20; 
-        floor.rotation.x = Math.PI; // 180 degrees
-        scene.add(floor);
+        //var floorTexture = new THREE.ImageUtils.loadTexture('../../assets/ice.jpg' );
+        //floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+        //floorTexture.repeat.set(10, 10 );
+        //var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side:THREE.BackSide } );
+        //var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+        //var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        //floor.position.z = 20; 
+        //floor.rotation.x = Math.PI; // 180 degrees
+        //scene.add(floor);
 
 
         // SKYBOX
@@ -91,12 +91,13 @@
             var hexColor = "#848081";
             animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
             animmesh.scale.set(.3,.3,.3);
-            animmesh.position.set(0,610,20);
+            animmesh.position.set(0,610,-2500);
             scene.add(animmesh);
             animation = new THREE.Animation(animmesh, model.animation);
             console.log('hey there');
             console.log(animation);
             animation.loop = false;
+            camera.lookAt(new THREE.Vector3(0,-80,-2500));
             animation.play(21);
             animate();
         });
@@ -137,7 +138,6 @@
 
         renderer.render(scene, camera);
 
-        camera.lookAt(new THREE.Vector3(0,-80,100));
     }
 
     init();
