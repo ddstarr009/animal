@@ -45,17 +45,18 @@
         var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
         var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
         var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
+        skybox.rotation.x = Math.PI / 2;
         scene.add( skybox );
 
 
         // mirror code
-        var boxGeom = new THREE.BoxGeometry(500, 10, 600, 1, 1, 1);
+        var boxGeom = new THREE.BoxGeometry(300, 10, 400, 1, 1, 1);
         mirrorCubeCamera = new THREE.CubeCamera(0.1, 10000, 1000);
         scene.add(mirrorCubeCamera);
 
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } ); // renderTarget is generated cube texture
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
-        mirrorCube.position.set(0,-450,320);
+        mirrorCube.position.set(0,-450,220);
         //mirrorCube.rotation.z = Math.PI / 2;
         mirrorCubeCamera.position = mirrorCube.position;
         scene.add(mirrorCube);
