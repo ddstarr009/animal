@@ -11,7 +11,7 @@
         // args for constructor are field of view, aspect ratio, near plane, far plane
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 10000 );
         camera.position.set(-307, 842,-2300);
-        camera.up.set( -1,0 ,1);
+        //camera.up.set( 0,1 ,0);
         controls = new THREE.OrbitControls( camera );
         scene = new THREE.Scene();
         scene.add(camera);
@@ -45,7 +45,7 @@
         var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
         var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
         var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
-        skybox.rotation.x = Math.PI / 2;
+        //skybox.rotation.x = Math.PI / 2;
         scene.add( skybox );
 
 
@@ -56,7 +56,7 @@
 
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } ); // renderTarget is generated cube texture
         mirrorCube = new THREE.Mesh(boxGeom, mirrorCubeMaterial);
-        mirrorCube.position.set(0,-450,220);
+        //mirrorCube.position.set(0,-450,220);
         //mirrorCube.rotation.z = Math.PI / 2;
         mirrorCubeCamera.position = mirrorCube.position;
         scene.add(mirrorCube);
@@ -90,21 +90,26 @@
         tgaLoader.load("../../assets/ELEPHANT_DIFF_SPEC.tga", function(texture) {
             var hexColor = "#848081";
             animmesh = new THREE.SkinnedMesh(model, new THREE.MeshBasicMaterial({color: hexColor, skinning: true, map: texture}));
-            animmesh.scale.set(.3,.3,.3);
-            animmesh.position.set(0,610,-2500);
+            //animmesh.scale.set(.3,.3,.3);
+            animmesh.rotation.x = -(Math.PI / 2);
+            //animmesh.position.set(0,610,-2500);
             scene.add(animmesh);
             animation = new THREE.Animation(animmesh, model.animation);
             console.log('hey there');
             console.log(animation);
             animation.loop = false;
-            camera.lookAt(new THREE.Vector3(0,-80,-2500));
+            console.log('hiiiii david face');
+            console.log(animmesh.position);
+            camera.lookAt(animmesh.position);
             animation.play(21);
+            //controls.addEventListener( 'change', render );
             animate();
         });
     }
 
     function animate() {
         requestAnimationFrame(animate); // tells browser to call animate callback before next repaint
+        //controls.update();
         render();
     }
 
@@ -131,9 +136,9 @@
                 THREE.AnimationHandler.update(delta);
             }
 
-            var yPos = animmesh.position.y - (1000 * clock.getDelta());
+            var zPos = animmesh.position.z + (5000 * clock.getDelta());
 
-            animmesh.position.y = yPos;
+            animmesh.position.z = zPos;
         }
 
         renderer.render(scene, camera);
